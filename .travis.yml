@@ -39,6 +39,7 @@ matrix:
 
 script:
     # скрипт сборки и тестирования проекта:
+    - cmake CMakeLists.txt
     - make
     - ./run_tests
     - ./iz2
