@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDART 11)
 set(CMAKE_CXX_STANDART_REQUIRED ON)
 set(LIB_SOURCE_FILES_S sequential.c)
 set(LIB_SOURCE_FILES_P parallel.c)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 
 add_library(sequential STATIC ${LIB_SOURCE_FILES_S})
 add_library(parallel SHARED ${LIB_SOURCE_FILES_P})
