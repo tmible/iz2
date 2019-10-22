@@ -37,11 +37,11 @@ install:
     # скрипт настройки среды и установки зависимостей:
     - sudo apt-get install libgtest-dev
     - sudo apt-get install cmake
-    - cd /usr/src/gtest
-    - sudo cmake CMakeLists.txt
-    - sudo make
-    - sudo cp *.a /usr/lib
-    - cd tmible/iz2
+    #- cd /usr/src/gtest
+    #- sudo cmake CMakeLists.txt
+    #- sudo make
+    #- sudo cp *.a /usr/lib
+    #- cd tmible/iz2
 
 script:
     # скрипт сборки и тестирования проекта:
