@@ -7,7 +7,7 @@
 #include <math.h>
 
 struct thread_info {
-	unsigned int *max_i, left, right, n;
+	unsigned int *max_i, left, right;
 	int *max_d, *arr;
 };
 int parallel(const char*, int);
