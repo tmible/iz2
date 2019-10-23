@@ -35,7 +35,6 @@ int parallel(const char *file_name, int threads_number) {
 		ti[i].arr = arr;
     	ti[i].left = i * (n / threads_number);
     	ti[i].right = (n / threads_number) * (i + 1) + 1;
-		ti[i].n = n;
     	if (ti[i].right > n) ti[i].right = n;
     	int status = pthread_create(&thread[i], NULL, max_delta, &ti[i]);
     	if (status != 0) {
