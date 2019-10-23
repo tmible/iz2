@@ -3,7 +3,7 @@
 void *max_delta(void *p) {
 	struct thread_info ti = *((struct thread_info *)p);
 	for (int i = ti.left; i < ti.right; i++)
-		if (ti.arr[i+1] - ti.arr[i] > *ti.max_d || (ti.arr[i+1] - ti.arr[i] == *ti.max_d && i < *ti.max_i)) {
+		if (i + 1 < ti.right && (ti.arr[i+1] - ti.arr[i] > *ti.max_d || (ti.arr[i+1] - ti.arr[i] == *ti.max_d && i < *ti.max_i))) {
 			*ti.max_i = i;
 			*ti.max_d = ti.arr[i+1] - ti.arr[i];
 		}
