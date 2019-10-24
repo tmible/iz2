@@ -26,7 +26,7 @@ install:
     - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
     - which valgrind
     - cd "${TRAVIS_BUILD_DIR}"
-    - apt-get install cppcheck
+    - sudo apt-get install cppcheck
 
 script:
     - cmake CMakeLists.txt
