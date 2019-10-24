@@ -15,7 +15,6 @@ env:
     - CODECOV_TOKEN="9d2553ea-9526-4476-b63e-2dc56fdf3f9c"
 
 install:
-    #- sudo apt-get -qq update
     - sudo apt-get install -y libgtest-dev valgrind cmake
     - wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
     - tar xf release-1.7.0.tar.gz
@@ -38,15 +37,3 @@ script:
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
-
-#deploy:
-#    provider:     releases
-#    file:         <package-file>
-#    skip_cleanup: true
-#    overwrite:    true
-
-#    api_key:
-#        secure:   <encrypted-github-token>
-
-#    on:
-#        tags:     true
