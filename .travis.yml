@@ -1,5 +1,5 @@
 dist: trusty
-#sudo: required
+sudo: required
 
 language: c
 
@@ -15,7 +15,7 @@ env:
     - CODECOV_TOKEN="9d2553ea-9526-4476-b63e-2dc56fdf3f9c"
 
 install:
-    - apt-get -qq update
+    - sudo apt-get -qq update
     - apt-get install -y libgtest-dev valgrind cmake
     - wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
     - tar xf release-1.7.0.tar.gz
