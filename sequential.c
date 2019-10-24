@@ -1,18 +1,9 @@
 #include "sequential.h"
 
-int sequentially(const char *file_name) {
-	int *arr = (int*)malloc(100 * pow(2, 20));
-	unsigned int n = 100 * pow(2, 20) / sizeof(int);
-	if (file_name[0] != '\0') {
-		FILE *f = fopen(file_name, "r");
-		for (unsigned int i = 0; i < n; i++)
-			fscanf(f, " %d", &arr[i]);
-		fclose(f);
-	} else {
-		srand(time(NULL));
-		for (unsigned int i = 0; i < n; i++)
-			arr[i] = -30 + rand() % 30;
-	}
+int search_max_delta_sequentially(unsigned int memory_size, const char *file_name, int seed) {
+	int *arr = init_array(memory_size, file_name, seed);
+	if (arr == NULL) return -1;
+	unsigned int n = memory_size / sizeof(int);
 	unsigned int max_i = 0;
 	int max_d = 0;
 	for (unsigned int i = 0; i < n - 1; i++)

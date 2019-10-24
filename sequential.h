@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "init_array.h"
 
-int sequentially(const char*);
+int search_max_delta_sequentially(unsigned int memory_size, const char* file_name, int seed);
 
 #endif
