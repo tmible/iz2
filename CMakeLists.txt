@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDART 11)
 set(CMAKE_CXX_STANDART_REQUIRED ON)
 set(LIB_SOURCE_FILES_S sequential.c)
 set(LIB_SOURCE_FILES_P parallel.c)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -fprofile-arcs -ftest-coverage")
+set(LDFLAGS "${LDFLAGS} -fprofile-arcs -ftest-coverage")
 
 add_library(sequential STATIC ${LIB_SOURCE_FILES_S})
+target_link_libraries(sequential gcov)
 add_library(parallel SHARED ${LIB_SOURCE_FILES_P})
 target_link_libraries(parallel -pthread)
 

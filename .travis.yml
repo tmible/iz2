@@ -3,9 +3,7 @@ sudo: required
 
 language: c
 
-os:
-    - linux
-    - osx
+os: linux
 
 compiler: gcc
 
@@ -14,17 +12,7 @@ env:
     - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
     - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
     - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-
-matrix:
-    exclude:
-        - os:       osx
-          compiler: gcc
-
-        - os:  osx
-          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-
-        - os:  osx
-          env: TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+    - CODECOV_TOKEN="9d2553ea-9526-4476-b63e-2dc56fdf3f9c"
 
 install:
     - sudo apt-get -qq update
@@ -45,6 +33,10 @@ script:
     - ./run_tests
     - ./iz2
     - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2
+    - gcov parallel.c sequential.c
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 
 deploy:
     provider:     releases
