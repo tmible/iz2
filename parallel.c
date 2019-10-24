@@ -19,23 +19,8 @@ void *max_delta(void *p) {
 int search_max_delta_parallel(unsigned int memory_size, const char *file_name, int threads_number, int seed) {
 	if (threads_number <= 0) return -2;
 	int *arr = init_array(memory_size, file_name, seed);
-	/*(int*)malloc(memory_size);*/
 	if (arr == NULL) return -1;
 	unsigned int n = memory_size / sizeof(int);
-	/*if (file_name[0] != '\0') {
-		FILE *f = fopen(file_name, "r");
-		if (f == NULL) {
-			free(arr);
-			return -2;
-		}
-		for (unsigned int i = 0; i < n; i++)
-			fscanf(f, "%d", &arr[i]);
-		fclose(f);
-	} else {
-		srand(seed);
-		for (unsigned int i = 0; i < n; i++)
-			arr[i] = -30 + rand() % 30;
-	}*/
 
     pthread_t thread[threads_number];
     struct thread_info *ti = (struct thread_info *)malloc(threads_number * sizeof(struct thread_info));
