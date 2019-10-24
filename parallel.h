@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <math.h>
+#include "init_array.h"
 
 struct thread_info {
 	unsigned int *max_i;

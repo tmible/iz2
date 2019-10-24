@@ -16,7 +16,7 @@ TEST(sequentially_test, standart_test) {
 
 TEST(sequentially_test, error_test) {
     unsigned int memory_size = 100 * pow(2, 20);
-    ASSERT_EQ(-2, search_max_delta_sequentially(memory_size, "test_data", time(NULL)));
+    ASSERT_EQ(-1, search_max_delta_sequentially(memory_size, "test_data", time(NULL)));
 }
 
 TEST(parallel_test, standart_test) {
@@ -29,9 +29,9 @@ TEST(parallel_test, standart_test) {
 
 TEST(parallel_test, error_test) {
     unsigned int memory_size = 100 * pow(2, 20);
-    ASSERT_EQ(-1, search_max_delta_parallel(memory_size, "test_data_1", 0, time(NULL)));
-    ASSERT_EQ(-1, search_max_delta_parallel(memory_size, "test_data_2", -13, time(NULL)));
-    ASSERT_EQ(-2, search_max_delta_parallel(memory_size, "test_data", 8, time(NULL)));
+    ASSERT_EQ(-1, search_max_delta_parallel(memory_size, "test_data", 8, time(NULL)));
+    ASSERT_EQ(-2, search_max_delta_parallel(memory_size, "test_data_1", 0, time(NULL)));
+    ASSERT_EQ(-2, search_max_delta_parallel(memory_size, "test_data_2", -13, time(NULL)));
 }
 
 int main(int argc, char **argv) {
