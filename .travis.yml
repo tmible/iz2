@@ -36,8 +36,8 @@ script:
     - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2
     - gcov parallel.c sequential.c
 
-#after_success:
-#    - bash <(curl -s https://codecov.io/bash)
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 
 #deploy:
 #    provider:     releases

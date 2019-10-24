@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDART_REQUIRED ON)
 set(LIB_SOURCE_FILES_S sequential.c)
 set(LIB_SOURCE_FILES_P parallel.c)
 set(LIB_SOURCE_FILES_I init_array.c)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -pedantic -Werror -fprofile-arcs -ftest-coverage -D_POSIX_C_SOURCE=199309L")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -pedantic -Werror -fPIC -fprofile-arcs -ftest-coverage -D_POSIX_C_SOURCE=199309L")
 set(LDFLAGS "${LDFLAGS} -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_CPPCHECK "cppcheck")
 
