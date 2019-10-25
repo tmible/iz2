@@ -5,7 +5,9 @@ language: c
 
 os: linux
 
-compiler: gcc
+compiler: 
+    - gcc
+    - clang
 
 env:
     - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
@@ -30,9 +32,12 @@ install:
 script:
     - cmake CMakeLists.txt
     - make
-    - ./run_tests
-    - ./iz2
-    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2
+    - ./run_tests_sequential
+    - ./run_tests_parallel
+    - ./iz2_s -s
+    - ./iz2_p -p
+    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2_s -s
+    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2_p -p
     - gcov parallel.c sequential.c
 
 after_success:
