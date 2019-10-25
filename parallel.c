@@ -1,59 +1,78 @@
-#include "parallel.h"
+#include "search.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
 
-int compare_d(struct thread_info *ti, int i) {
-	return ((*ti).arr[i+1] - (*ti).arr[i]) - *(*ti).max_d;
+struct range_of_slice {
+	size_t left;
+	size_t right;
+};
+
+struct thread_info {
+	size_t *max_i;
+	int *arr;
+	struct range_of_slice range;
+};
+
+void init_struct(struct thread_info *ti, size_t *max_i, int *arr, int i, size_t n, int threads_number) {
+	ti->max_i = max_i;
+	ti->arr = arr;
+	ti->range.left = i * (n / threads_number);
+	ti->range.right = (n / threads_number) * (i + 1) + 1;
+	if (ti->range.right > n) {
+		ti->range.right = n;
+	}
+	return;
 }
 
-void *max_delta(void *p) {
-	if (p != NULL) {
-		struct thread_info ti = *((struct thread_info *)p);
-		for (int i = ti.left; i < ti.right - 1; i++)
-			if ((i < *ti.max_i && compare_d(&ti, i) == 0) || compare_d(&ti, i) > 0) {
-				*ti.max_i = i;
-				*ti.max_d = ti.arr[i+1] - ti.arr[i];
-			}
+size_t max_delta(int *arr, size_t left, size_t right) {
+	size_t max_i = left;
+	for (size_t i = left; i < right - 1; i++) {
+		if (arr[i+1] - arr[i] > arr[max_i+1] - arr[max_i]) {
+			max_i = i;
+		}
+	}
+	return max_i;
+}
+
+void *thread_func(void *p) {
+	if (p == NULL) {
+		pthread_exit(0);
+	}
+	struct thread_info ti = *((struct thread_info *)p);
+	size_t max_i = max_delta(ti.arr, ti.range.left, ti.range.right);
+	if (((max_i < *(ti.max_i)) && (ti.arr[max_i+1] - ti.arr[max_i] == ti.arr[*(ti.max_i)+1] - ti.arr[*(ti.max_i)])) ||
+		(ti.arr[max_i+1] - ti.arr[max_i] > ti.arr[*(ti.max_i)+1] - ti.arr[*(ti.max_i)])) {
+		*(ti.max_i) = max_i;
 	}
 	return 0;
 }
 
-int search_max_delta_parallel(unsigned int memory_size, const char *file_name, int threads_number, int seed) {
-	if (threads_number <= 0) return -2;
-	int *arr = init_array(memory_size, file_name, seed);
-	if (arr == NULL) return -1;
-	unsigned int n = memory_size / sizeof(int);
-
+int search(size_t memory_size, int* arr) {
+	size_t n = memory_size / sizeof(int);
+	int threads_number = sysconf(_SC_NPROCESSORS_CONF) * 2;
     pthread_t thread[threads_number];
     struct thread_info *ti = (struct thread_info *)malloc(threads_number * sizeof(struct thread_info));
-    unsigned int max_i = -1;
-    int max_d = 0;
+	if (ti == NULL) {
+		return -1;
+	}
+    size_t max_i = 0;
 
     for (int i = 0; i < threads_number; i++) {
-		ti[i].max_i = &max_i;
-		ti[i].max_d = &max_d;
-		ti[i].arr = arr;
-		ti[i].left = i * (n / threads_number);
-		ti[i].right = (n / threads_number) * (i + 1) + 1;
-    	if (ti[i].right > n) ti[i].right = n;
-    	int status = pthread_create(&thread[i], NULL, max_delta, &ti[i]);
+		init_struct(&(ti[i]), &max_i, arr, i, n, threads_number);
+    	int status = pthread_create(&thread[i], NULL, thread_func, &ti[i]);
     	if (status != 0) {
-			printf("main error: can't create thread, status = %d\n", status);
-			free(ti);
-			free(arr);
-			pthread_exit(&ti[i]);
+			pthread_cancel(thread[i]);
 		}
 	}
 
     for (int i = 0; i < threads_number; i++) {
     	int status = pthread_join(thread[i], NULL);
     	if (status != 0) {
-        	printf("main error: can't join thread, status = %d\n", status);
-        	free(ti);
-        	free(arr);
-        	pthread_exit(&ti[i]);
+        	pthread_cancel(thread[i]);
     	}
     }
 
     free(ti);
-    free(arr);
     return max_i;
 }

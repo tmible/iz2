@@ -1,16 +1,16 @@
-#include "sequential.h"
+#include "search.h"
 
-int search_max_delta_sequentially(unsigned int memory_size, const char *file_name, int seed) {
-	int *arr = init_array(memory_size, file_name, seed);
-	if (arr == NULL) return -1;
-	unsigned int n = memory_size / sizeof(int);
-	unsigned int max_i = 0;
-	int max_d = 0;
-	for (unsigned int i = 0; i < n - 1; i++)
-		if (arr[i+1] - arr[i] > max_d) {
+size_t max_delta(int *arr, size_t n) {
+	size_t max_i = 0;
+	for (size_t i = 0; i < n - 1; i++) {
+		if (arr[i+1] - arr[i] > arr[max_i+1] - arr[max_i]) {
 			max_i = i;
-			max_d = arr[i+1] - arr[i];
 		}
-	free(arr);
+	}
 	return max_i;
+}
+
+int search(size_t memory_size, int *arr) {
+	size_t n = memory_size / sizeof(int);
+	return max_delta(arr, n);
 }
