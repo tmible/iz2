@@ -23,7 +23,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(iz2_s main.c)
 target_link_libraries(iz2_s sequential)
 
-add_executable(iz2_p mian.c)
+add_executable(iz2_p main.c)
 target_link_libraries(iz2_p parallel)
 
 add_executable(run_tests_sequential unit_tests_sequential.cpp)
