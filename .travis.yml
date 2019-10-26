@@ -31,12 +31,11 @@ install:
 script:
     - cmake CMakeLists.txt
     - make
-    - ./run_tests_sequential
-    - ./run_tests_parallel
-    - ./iz2_s -s
-    - ./iz2_p -p
-    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2_s -s
-    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2_p -p
+    - ./run_tests
+    - ./iz2 -s
+    - ./iz2 -p
+    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2 -s
+    - valgrind --tool=memcheck --leak-check=full --leak-resolution=med  --track-origins=yes ./iz2 -p
     - gcov parallel.c sequential.c
 
 after_success:
