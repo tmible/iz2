@@ -50,30 +50,40 @@ int test(size_t memory_size, char mode) {
 	}
 
 	if (mode == 's') {
-		clock_t sequential_start_time = clock();
-		search_s(arr, memory_size);
-		clock_t sequential_end_time = clock();
-		printf("время работы последовательного алгоритма: %.9f s\n", (float)(sequential_end_time - sequential_start_time) / CLOCKS_PER_SEC);
+        clock_t sequential_time = 0;
+        for (int i = 0; i < 4; i++) {
+            clock_t sequential_start_time = clock();
+		    search_s(arr, memory_size);
+		    clock_t sequential_end_time = clock();
+            sequential_time += sequential_end_time - sequential_start_time;
+        }
+		printf("время работы последовательного алгоритма: %.9f s\n", ((float)(sequential_time) / 4) / CLOCKS_PER_SEC);
 	}
 
 	if (mode == 'p') {
-		struct timespec parallel_start_time;
-		clock_gettime(CLOCK_MONOTONIC, &parallel_start_time);
-		int r = search_p(arr, memory_size);
-		if (r < 0) {
-			free(arr);
-			return r - 1;
-		}
-		struct timespec parallel_end_time;
-		clock_gettime(CLOCK_MONOTONIC, &parallel_end_time);
-		struct timespec parallel_time;
-		parallel_time.tv_sec = parallel_end_time.tv_sec - parallel_start_time.tv_sec;
-		parallel_time.tv_nsec = parallel_end_time.tv_nsec - parallel_start_time.tv_nsec;
-		if (parallel_time.tv_nsec < 0) {
-	  		parallel_time.tv_sec--;
-	  		parallel_time.tv_nsec += 1000000000L;
-		}
-	    printf("время работы параллельного алгоритма: %ld.%ld s\n", parallel_time.tv_sec, parallel_time.tv_nsec);
+        struct timespec parallel_time;
+        for (int i = 0; i < 4; i++) {
+            struct timespec parallel_start_time;
+            clock_gettime(CLOCK_MONOTONIC, &parallel_start_time);
+            int r = search_p(arr, memory_size);
+            if (r < 0) {
+                free(arr);
+                return r - 1;
+            }
+            struct timespec parallel_end_time;
+            clock_gettime(CLOCK_MONOTONIC, &parallel_end_time);
+            parallel_time.tv_sec += parallel_end_time.tv_sec - parallel_start_time.tv_sec;
+            parallel_time.tv_nsec += parallel_end_time.tv_nsec - parallel_start_time.tv_nsec;
+    		if (parallel_time.tv_nsec < 0) {
+    	  		parallel_time.tv_sec--;
+    	  		parallel_time.tv_nsec += 1000000000L;
+    		}
+        }
+        if (parallel_time.tv_nsec >= 1000000000L) {
+            parallel_time.tv_sec++;
+            parallel_time.tv_nsec -= 1000000000L;
+        }
+	    printf("время работы параллельного алгоритма: %ld.%ld s\n", parallel_time.tv_sec/4, parallel_time.tv_nsec/4);
 	}
 
 	free(arr);
