@@ -25,7 +25,7 @@ void init_struct(struct thread_info *ti, size_t *max_i, int *arr, int i, size_t 
 	return;
 }
 
-size_t max_delta(int *arr, size_t left, size_t right) {
+size_t max_delta_p(int* arr, size_t left, size_t right) {
 	size_t max_i = left;
 	for (size_t i = left; i < right - 1; i++) {
 		if (arr[i+1] - arr[i] > arr[max_i+1] - arr[max_i]) {
@@ -40,7 +40,7 @@ void *thread_func(void *p) {
 		pthread_exit(0);
 	}
 	struct thread_info ti = *((struct thread_info *)p);
-	size_t max_i = max_delta(ti.arr, ti.range.left, ti.range.right);
+	size_t max_i = max_delta_p(ti.arr, ti.range.left, ti.range.right);
 	if (((max_i < *(ti.max_i)) && (ti.arr[max_i+1] - ti.arr[max_i] == ti.arr[*(ti.max_i)+1] - ti.arr[*(ti.max_i)])) ||
 		(ti.arr[max_i+1] - ti.arr[max_i] > ti.arr[*(ti.max_i)+1] - ti.arr[*(ti.max_i)])) {
 		*(ti.max_i) = max_i;
@@ -48,9 +48,9 @@ void *thread_func(void *p) {
 	return 0;
 }
 
-int search(size_t memory_size, int* arr) {
+int search_p(int* arr, size_t memory_size) {
 	size_t n = memory_size / sizeof(int);
-	int threads_number = sysconf(_SC_NPROCESSORS_CONF) * 2;
+	int threads_number = sysconf(_SC_NPROCESSORS_CONF);
     pthread_t thread[threads_number];
     struct thread_info *ti = (struct thread_info *)malloc(threads_number * sizeof(struct thread_info));
 	if (ti == NULL) {

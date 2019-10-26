@@ -30,12 +30,12 @@ int random_temperature() {
     return a;
 }
 
-int* init_array(size_t size, int seed) {
-    int *arr = (int*)malloc(size);
+int* init_array(size_t memory_size, int seed) {
+    int *arr = (int*)malloc(memory_size);
     if (arr == NULL) {
         return NULL;
     }
-    size_t n = size / sizeof(int);
+    size_t n = memory_size / sizeof(int);
 	srand(seed);
 	for (size_t i = 0; i < n; i++) {
 		arr[i] = random_temperature();
@@ -51,7 +51,7 @@ int test(size_t memory_size, char mode) {
 
 	if (mode == 's') {
 		clock_t sequential_start_time = clock();
-		search(memory_size, arr);
+		search_s(arr, memory_size);
 		clock_t sequential_end_time = clock();
 		printf("время работы последовательного алгоритма: %.9f s\n", (float)(sequential_end_time - sequential_start_time) / CLOCKS_PER_SEC);
 	}
@@ -59,7 +59,7 @@ int test(size_t memory_size, char mode) {
 	if (mode == 'p') {
 		struct timespec parallel_start_time;
 		clock_gettime(CLOCK_MONOTONIC, &parallel_start_time);
-		int r = search(memory_size, arr);
+		int r = search_p(arr, memory_size);
 		if (r < 0) {
 			free(arr);
 			return r - 1;
